@@ -14,13 +14,7 @@ app.use("/public", express.static("public"));
 
 app.get("/greet", (req, res) => {
   const name = req.query.name;
-  console.log(req.query);
-  res.send(`<h1>hello via query, ${name}!`);
-});
-
-app.get("/greet/:name", (req, res) => {
-  const name = req.params.name;
-  res.send(`<h1>hello via param, ${name}!`);
+  res.render("greet", { name });
 });
 
 app.listen(3000, () => {
