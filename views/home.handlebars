@@ -2,11 +2,12 @@
 
 <ul>
     {{#each messages}}
-    <li>{{this.message}}</li>
+    <li>{{this.author}}: {{this.message}}</li>
     {{/each}}
 </ul>
 
 <form action="message" method="POST">
+    <input type="text" name="author" id="author" placeholder="who are you?" />
     <input type="text" name="message" id="message" placeholder="say something" />
     <button type="submit">send!</button>
 </form>

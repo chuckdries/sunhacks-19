@@ -22,17 +22,18 @@ app.get("/", async (req, res) => {
 
 app.post("/message", async (req, res) => {
   const db = await dbPromise;
-  const message = req.body.message;
-  await db.run("INSERT INTO messages (message) VALUES (?)", message);
+  const { author, message } = req.body;
+  await db.run(
+    "INSERT INTO messages (author, message) VALUES (?, ?)",
+    author,
+    message
+  );
   res.redirect("/");
 });
 
 const setup = async () => {
   const db = await dbPromise;
-  await db.run(`CREATE TABLE IF NOT EXISTS messages (
-    id INTEGER PRIMARY KEY,
-    message STRING NOT NULL
-  )`);
+  await db.migrate({ force: "last" });
   app.listen(3000, () => {
     console.log("listening on http://localhost:3000");
   });
