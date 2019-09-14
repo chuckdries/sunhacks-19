@@ -1,24 +1,16 @@
 const express = require("express");
+const hbs = require("express-handlebars");
+
 const app = express();
 
-// // examples of function definitions
-// function add(x, y) {
-//   return x + y;
-// }
-
-// const subtract = function(x, y) {
-//   return x - y;
-// };
-
-// const multiply = (x, y) => {
-//   return x * y;
-// };
-
-// const divide = (x, y) => x / y;
+app.engine("handlebars", hbs());
+app.set("view engine", "handlebars");
 
 app.get("/", (req, res) => {
-  res.send("<h1>hello world</h1>");
+  res.render("home");
 });
+
+app.use("/public", express.static("public"));
 
 app.get("/greet", (req, res) => {
   const name = req.query.name;
