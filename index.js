@@ -1,20 +1,25 @@
 const express = require("express");
 const hbs = require("express-handlebars");
+const bodyParser = require("body-parser");
 
 const app = express();
 
 app.engine("handlebars", hbs());
 app.set("view engine", "handlebars");
 
-app.get("/", (req, res) => {
-  res.render("home");
-});
-
+app.use(bodyParser());
 app.use("/public", express.static("public"));
 
-app.get("/greet", (req, res) => {
-  const name = req.query.name;
-  res.render("greet", { name });
+const messages = ["hello there", "howdy"];
+
+app.get("/", (req, res) => {
+  res.render("home", { messages });
+});
+
+app.post("/message", (req, res) => {
+  const message = req.body.message;
+  messages.push(message);
+  res.redirect("/");
 });
 
 app.listen(3000, () => {
