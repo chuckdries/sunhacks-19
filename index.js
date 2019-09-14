@@ -2,38 +2,40 @@ import express from "express";
 import hbs from "express-handlebars";
 import bodyParser from "body-parser";
 import { getTimer } from "./utils";
+import sqlite from "sqlite";
 
 const app = express();
+const dbPromise = sqlite.open("./database.sqlite");
 
 app.engine("handlebars", hbs());
 app.set("view engine", "handlebars");
 
-app.use(bodyParser());
+app.use(bodyParser({ extended: false }));
 app.use("/public", express.static("public"));
 
-const messages = ["hello there", "howdy"];
-
-// promises represent a value that might not exist yet
-// getTimer returns a promise that "resolves" with a "value" after a set number of milliseconds
-const helloTimer = getTimer(3000, "hello");
-console.log("hello timer is:", helloTimer);
-// you attach a function to a promise with `.then` to tell node to call that function with the value when the promise resolves
-helloTimer.then(value => console.log("hello timer's value is:", value));
-
-// you can also use promises in 'async' functions
 app.get("/", async (req, res) => {
-  // where you merely need to 'await' them, which tells node to pause the function until the promise resolves
-  // here, we're using our promise timer to pretend that it takes a long time to retreive the messages from a hypothetical database
-  const msgs = await getTimer(2000, messages);
-  res.render("home", { messages: msgs });
+  const db = await dbPromise;
+  const messages = await db.all("SELECT * FROM messages");
+  console.log("messages", messages);
+  res.render("home", { messages });
 });
 
-app.post("/message", (req, res) => {
+app.post("/message", async (req, res) => {
+  const db = await dbPromise;
   const message = req.body.message;
-  messages.push(message);
+  await db.run("INSERT INTO messages (message) VALUES (?)", message);
   res.redirect("/");
 });
 
-app.listen(3000, () => {
-  console.log("listening on http://localhost:3000");
-});
+const setup = async () => {
+  const db = await dbPromise;
+  await db.run(`CREATE TABLE IF NOT EXISTS messages (
+    id INTEGER PRIMARY KEY,
+    message STRING NOT NULL
+  )`);
+  app.listen(3000, () => {
+    console.log("listening on http://localhost:3000");
+  });
+};
+
+setup();
