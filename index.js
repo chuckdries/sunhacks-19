@@ -1,6 +1,5 @@
 import express from "express";
 import hbs from "express-handlebars";
-import bodyParser from "body-parser";
 import { getTimer } from "./utils";
 import sqlite from "sqlite";
 
@@ -10,7 +9,8 @@ const dbPromise = sqlite.open("./database.sqlite");
 app.engine("handlebars", hbs());
 app.set("view engine", "handlebars");
 
-app.use(bodyParser({ extended: false }));
+// app.use(bodyParser({ extended: false }));
+app.use(express.urlencoded({ extended: false }));
 app.use("/public", express.static("public"));
 
 app.get("/", async (req, res) => {
