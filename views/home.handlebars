@@ -1,13 +1,20 @@
 <h1>messages</h1>
 
 <ul>
-    {{#each messages}}
-    <li>{{this.author}}: {{this.message}}</li>
-    {{/each}}
+  {{#each messages}}
+  <li>{{this.authorId}}: {{this.message}}</li>
+  {{/each}}
 </ul>
 
 <form action="message" method="POST">
-    <input type="text" name="author" id="author" placeholder="who are you?" />
-    <input type="text" name="message" id="message" placeholder="say something" />
-    <button type="submit">send!</button>
+  <select name="authorId" id="authorId">
+    <option value="select a user">select a user</option>
+    {{#each users}}
+    <option value="{{this.id}}">{{this.name}} ({{this.email}})</option>
+    {{/each}}
+  </select>
+  <input type="text" name="message" id="message" placeholder="say something" />
+  <button type="submit">send!</button>
 </form>
+
+<a href="register">register for an account</a>

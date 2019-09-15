@@ -15,19 +15,33 @@ app.use("/public", express.static("public"));
 
 app.get("/", async (req, res) => {
   const db = await dbPromise;
-  const messages = await db.all("SELECT * FROM messages");
+  const [messages, users] = await Promise.all([
+    db.all("SELECT * FROM messages"),
+    db.all("SELECT * FROM users")
+  ]);
   console.log("messages", messages);
-  res.render("home", { messages });
+  res.render("home", { messages, users });
 });
 
 app.post("/message", async (req, res) => {
   const db = await dbPromise;
-  const { author, message } = req.body;
+  const { authorId, message } = req.body;
   await db.run(
-    "INSERT INTO messages (author, message) VALUES (?, ?)",
-    author,
+    "INSERT INTO messages (authorId, message) VALUES (?, ?)",
+    authorId,
     message
   );
+  res.redirect("/");
+});
+
+app.get("/register", async (req, res) => {
+  res.render("register");
+});
+
+app.post("/register", async (req, res) => {
+  const db = await dbPromise;
+  const { email, name } = req.body;
+  await db.run("INSERT INTO users (email, name) VALUES (?, ?)", email, name);
   res.redirect("/");
 });
 
