@@ -1,5 +1,7 @@
 TODO: do I want to move the prep branches to all be on top of the completed slides so checking out any given prep branch leaves you with all the slides intact?
 
+sub-note: perhaps the prep branches actually do contain slides and code together,but only commit one or the other per commit. IR separate the commits into independent 'slides' and 'examples' branches, merge 'slides' into master, rebase 'examples' on top of master and then ref all the specific examples
+
 # Sunhacks 2019 "zero to hero" workshop series
 
 A head-first introduction to web development
