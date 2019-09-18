@@ -17,4 +17,4 @@ I'm writing the code for this in advance - all my original prep code is in branc
 
 the code we write together will eventually be uploaded to branches listed as `live/...`
 
-The slides will live in the `slides` folder. When relevant, a slide may list a reference to a prep branch, which will contain code from that slide applied to the project
+The slides will live in the `slides` folder. When relevant, a slide may list a reference to a prep branch, which will contain the project with that step completed
