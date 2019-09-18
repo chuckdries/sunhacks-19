@@ -1,3 +1,5 @@
+TODO: do I want to move the prep branches to all be on top of the completed slides so checking out any given prep branch leaves you with all the slides intact?
+
 # Sunhacks 2019 "zero to hero" workshop series
 
 A head-first introduction to web development
