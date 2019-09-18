@@ -1,9 +1,20 @@
-# Sunhacks 2019 lecture
+# Sunhacks 2019 "zero to hero" workshop series
 
-Welcome! This repository contains my preparation and reference material, as well as the code we wrote together during the class.
+A head-first introduction to web development
 
-Preparation work is done in the branches labeled `prep/...`.
+## Overview
 
-Live lecture code lives in branches labeled `live/...`.
+This series will be broken into two workshops:
 
-We're going to be building a message board. Sort of like a twitter clone, except with one global timeline and no concept of followers. The first lecture will cover the basics of taking user input and displaying it to other users. The second lecture will go over databases and implement user accounts and a login system.
+1. A web application that takes input from users and shows it to other users
+2. Add user accounts and authentication to the application created in workshop 1
+
+We're going to be building a message board, sort of like twitter but without the concept of "followers".
+
+## How to use this repo
+
+I'm writing the code for this in advance - all my original prep code is in branches labeled `prep/...`.
+
+the code we write together will eventually be uploaded to branches listed as `live/...`
+
+The slides will live in the `slides` folder. When relevant, a slide may list a reference to a prep branch, which will contain code from that slide applied to the project
