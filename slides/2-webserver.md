@@ -57,7 +57,8 @@ Then, add this line to the top:
 const express = require("express");
 ```
 
-This is how we reference external code in our node files. There are actually other ways to reference external code (some tutorials you find may use an `import` statement, for example), but we won't go over those now.
+This is how we reference external code in our node projects. There are actually other ways to reference external code 
+(some tutorials you find may use an `import` statement, for example), but we won't go over those now.
 
 Next, we need to create an express instance
 
@@ -74,10 +75,7 @@ app.get("/", (req, res) => {
   res.send("hello world");
 });
 ```
-
-- app.get instructs express to respond to `GET` requests
-- the string `"/"` specifies the path we're handling (`/` is the default path)
-- the function is what express calls when it gets a `GET` request to `/`. Its two parameters, req and res, refer to the incoming request, and your response to it. `req` contains informatino like the path. `res` contains methods like `send` to send a response
+This registers a function that express will call when it gets a `GET` request to the root url, `/`.
 
 Finally, we need to tell our app to listen for requests
 
@@ -91,7 +89,7 @@ this just starts our webserver, and logs a message when it comes up. `localhost`
 
 Run `npm run start`, then go to http://localhost:3000 in your browser, and you should see "hello world"
 
-If you go to http://localhost:3000/foo in your browser, you should get a 404 error, because we're only handling `/`
+If you go to http://localhost:3000/foo in your browser, you should get a 404 error, because we're only handling the `/` route
 
 Our webserver should now look like this
 
