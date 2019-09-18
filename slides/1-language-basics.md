@@ -1,4 +1,4 @@
-# A quick intro to javascript and node
+# 1. A quick intro to javascript and node
 
 reference branch: `prep/basics`
 
