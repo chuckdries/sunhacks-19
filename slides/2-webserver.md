@@ -108,3 +108,47 @@ app.listen(3000, () => {
   console.log("listening on http://localhost:3000");
 });
 ```
+
+## A webserver that greets people by name
+
+reference branch: `prep/greeting-webserver`
+
+We're going to look at two ways of dynamically pulling information from the URL itself.
+
+### Route parameters
+
+Express's router has the ability to leave placeholders in the route when we register the handler, which it will fill in with data from the url that the user visits.
+
+Let's add a handler to greet someone by name. Add this above the `app.listen` call.
+
+```javascript
+app.get("/greet/:name", (req, res) => {
+  const name = req.params.name;
+  res.send(`Hello ${name}! Welcome to your page`);
+});
+```
+
+When the user visits http://localhost:3000/greet/chuck, for example, express picks out 'chuck' and gives it to us as `req.params.name`. Pretty straightforward. If you haven't already, stop your webserver with `ctrl + c`, then start it with `npm run start` again, and try your new greet route with different names. Every time we make a change to the code, you'll need to stop and start your webserver. From now on I won't be explicity saying that.
+
+You may have noticed that `/greet/` with no name doesn't work. That's because the name parameter must be present for the handler above to be called. Let's add a greet route that does not use a route parameter.
+
+### Query parameters
+
+Query parameters are key value pairs appended to the end of a URL after a question mark. They're a way to store data in the URL without changing the path. We're going to make a route at `greet` that works with or without being given a name.
+
+```javascript
+app.get("/greet", (req, res) => {
+  const name = req.query.name;
+  if (name) {
+    res.send(`Hello ${name}!`);
+  } else {
+    res.send("Well this is awkward... I don't know who you are");
+  }
+});
+```
+
+Try hitting `/greet` now. You should get the no name message. To add a name, try this: http://localhost:3000/greet?name=chuck. We separate the path from the query string by a question mark, then we just say `name=chuck`
+
+The decision to use query params vs route params is pretty situational, don't worry too much about it now.
+
+Let's move on to making something that looks nicer
