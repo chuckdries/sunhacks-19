@@ -83,3 +83,77 @@ app.set("view engine", "handlebars");
 ```
 
 ## Setting up and using our first template
+
+Express expects you to put your template in a folder called `views`, make one now. In it, make a new file
+called `home.handlebars`. This will be our main template. Let's put some content in it:
+
+```HTML
+<html>
+  <head>
+    <title>Hello world page</title>
+  </head>
+  <body>
+    <h1>Hello there</h1>
+  </body>
+</html>
+```
+
+Then, in `index.js`, update your index route (the one that responds to "`\`") to render the template:
+
+```javascript
+app.get("/", (req, res) => {
+  res.render("home", { layout: false });
+});
+```
+
+Note the second parameter to the render call - it's an object with a single key in it, `layout`, which is set to `false`.
+The object you pass into res.render always gets passed along to the templating system. Normally, you use it to inject data
+into templates (which we'll get to), but express-handlebars has a feature called "layouts", which are ways to share common code
+between many similar templates, and it uses the layout value to control that. We're setting it to "false" because we haven't
+set up any layouts yet.
+
+Run your code and see our bold, beautiful webpage!
+
+Now, let's make a layout and get some data into our templates.
+
+Make a `layouts` folder **in the `views` folder** and make a new file called `main.handlebars` inside it. Fill it out like so
+
+```HTML
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  {{{ body }}}
+</body>
+
+</html>
+```
+
+This is a standard scaffold for a webpage. Don't worry too much about what those extra tags do. If you're using vscode, type an exclamation mark then press tab to generate this code for you.
+
+Note the `{{{ body }}}`. This is our first placeholder. express-handlebars will replace it with the html that comes out of the template we render from `res.render`.
+
+Speaking of our template, let's update that as well
+
+```HTML
+<h1>Hello there</h1>
+```
+
+We don't need the rest of the code that was there anymore - we moved it to the layout.
+
+Finally, remove the `template: false` instruction from our render call in `index.js`
+
+```javascript
+app.get("/", (req, res) => {
+  res.render("home");
+});
+```
+
+Run your code now, and you should see the same thing we saw before. Because we change a template, you'll have to manually stop your code if it's still running.
