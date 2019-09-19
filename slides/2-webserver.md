@@ -2,7 +2,7 @@
 
 reference branch: `prep/hello-world-webserver`
 
-In this slide, we're going to be introduced to Express, which will allow us to respond to HTTP requests
+In this slide, we're going to be introduced to Express, which will help us respond to HTTP requests
 
 Activities
 
@@ -57,7 +57,7 @@ Then, add this line to the top:
 const express = require("express");
 ```
 
-This is how we reference external code in our node projects. There are actually other ways to reference external code 
+This is how we reference external code in our node projects. There are actually other ways to reference external code
 (some tutorials you find may use an `import` statement, for example), but we won't go over those now.
 
 Next, we need to create an express instance
@@ -75,6 +75,7 @@ app.get("/", (req, res) => {
   res.send("hello world");
 });
 ```
+
 This registers a function that express will call when it gets a `GET` request to the root url, `/`.
 
 Finally, we need to tell our app to listen for requests
