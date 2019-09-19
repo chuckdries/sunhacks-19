@@ -1,9 +1,16 @@
 // index.js
 const express = require("express");
+const hbs = require("express-handlebars");
+
 const app = express();
 
+app.engine("handlebars", hbs());
+app.set("view engine", "handlebars");
+
+app.use("/public", express.static("public"));
+
 app.get("/", (req, res) => {
-  res.send("hello world");
+  res.render("home");
 });
 
 app.get("/greet/:name", (req, res) => {
