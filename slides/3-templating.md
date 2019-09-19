@@ -6,9 +6,8 @@ In this slide, we're going to introduce a templating system, which allows us to 
 
 Activities
 
-1. Replace our simple string responses with full HTML pages
+1. Replace our simple string response with a full HTML page rendered from a template
 2. Write and serve some simple CSS
-3. Build a form in one of our templates that allows the user to enter their name, and use that information to greet them
 
 ## A quick primer on HTML
 
@@ -140,7 +139,7 @@ This is a standard scaffold for a webpage. Don't worry too much about what those
 
 Note the `{{{ body }}}`. This is our first placeholder. express-handlebars will replace it with the html that comes out of the template we render from `res.render`.
 
-Speaking of our template, let's update that as well
+Speaking of our template, let's update `views/home.handlebars` as well
 
 ```HTML
 <h1>Hello there</h1>
@@ -156,4 +155,47 @@ app.get("/", (req, res) => {
 });
 ```
 
-Run your code now, and you should see the same thing we saw before. Because we change a template, you'll have to manually stop your code if it's still running.
+Run your code now, and you should see the same thing we saw before.
+Because we change a template, you'll have to manually stop your code if it's still running.
+
+Finally, we want to style our page. This is done with a language called CSS. We could put all our CSS in our template file, but that will
+quickly grow unweildly as our project grows, so we want to write our styles in dedicated CSS files. HTML has a way of linking to external
+stylesheets built in, so all we need to do is make sure they're accessible
+
+First, make a folder called `public`.
+
+Next, add this code to `index.js` to tell express to serve the contents of `public` so our users' browsers can get to the files inside it.
+I put this code below `app.set` but before the first `app.get`, but you can put it anywhere below `const app = express()`
+
+```javascript
+app.use("/public", express.static("public"));
+```
+
+It's worth noting that express will serve anything you put in the public directory now, so if we need images for our pages, for example,
+we can put them there as well as stylesheets. Let's make our first stylesheet not
+
+Make a new file inside of `public` called `index.css`, and fill it with content.
+
+```CSS
+body {
+  max-width: 500px;
+  margin: auto;
+  margin-top: 1em;
+  background: #eee;
+  color: #333;
+}
+```
+
+CSS is sort of out of scope for now, but like everything we're learning today, there are fantastic resources available online.
+
+Finally, let's link our CSS file in our layout. Add the following to the `head` section of `views/layouts/main.handlebars`
+
+```HTML
+  <link rel="stylesheet" href="public/index.css">
+```
+
+When the browser sees that line, it will try to download `http://localhost:3000/public/index.css`.
+
+Now, run the code. It should look a little better now.
+
+In our next slide, we'll actually inject data into our template.
