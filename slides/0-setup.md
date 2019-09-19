@@ -1,4 +1,4 @@
-# Setup your project
+# 0. Setup your project
 
 1. Install NodeJS (nodejs.org)
 2. clone this repo: `git clone https://github.com/chuckdries/sunhacks-19`
