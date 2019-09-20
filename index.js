@@ -15,22 +15,21 @@ app.use("/public", express.static("public"));
 
 app.get("/", async (req, res) => {
   const db = await dbPromise;
-  const [messages, users] = await Promise.all([
-    db.all("SELECT * FROM messages"),
-    db.all("SELECT * FROM users")
-  ]);
-  console.log("messages", messages);
-  res.render("home", { messages, users });
+  const messages = await db.all(
+    "SELECT messages.message, users.name as author FROM messages LEFT JOIN users WHERE users.id = messages.authorId"
+  );
+  res.render("home", { messages });
 });
 
 app.post("/message", async (req, res) => {
   const db = await dbPromise;
-  const { authorId, message } = req.body;
-  await db.run(
-    "INSERT INTO messages (authorId, message) VALUES (?, ?)",
-    authorId,
-    message
+  const { authorEmail, message } = req.body;
+  const result = await db.run(
+    "INSERT INTO messages (authorId, message) SELECT  users.id, ? FROM users WHERE users.email = ?",
+    message,
+    authorEmail
   );
+  console.log(result.stmt.changes);
   res.redirect("/");
 });
 

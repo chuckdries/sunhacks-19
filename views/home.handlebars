@@ -2,19 +2,22 @@
 
 <ul>
   {{#each messages}}
-  <li>{{this.authorId}}: {{this.message}}</li>
+  <li>
+    <h2>{{this.author}}</h2>
+    <p>
+      {{this.message}}
+    </p>
+  </li>
   {{/each}}
 </ul>
 
 <form action="message" method="POST">
-  <select name="authorId" id="authorId">
-    <option value="select a user">select a user</option>
-    {{#each users}}
-    <option value="{{this.id}}">{{this.name}} ({{this.email}})</option>
-    {{/each}}
-  </select>
-  <input type="text" name="message" id="message" placeholder="say something" />
-  <button type="submit">send!</button>
+  <div>
+    <input type="email" name="authorEmail" placeholder="your email" />
+    <input type="text" name="message" id="message" placeholder="say something" />
+    <button type="submit">send!</button>
+  </div>
+  <div style="margin-top: .5em">
+    <a href="register">register for an account</a>
+  </div>
 </form>
-
-<a href="register">register for an account</a>
