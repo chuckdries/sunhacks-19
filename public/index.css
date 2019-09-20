@@ -29,7 +29,7 @@ ul {
 }
 li {
   display: block;
-  /* margin: 1em; */
+  margin-bottom: 1em;
 }
 form,
 li {
