@@ -134,8 +134,7 @@ console.log("four");
 // this code will log, "one", "two", wait 300ms, then log "hello there", "three", "four"
 ```
 
-I've created a file in the example branch for this slide `utilities/getPromiseTimer.js`. Feel free to import
-it into `index.js` (where you'll note I've converted all the require statements to imports) and play with it like
-I've shown above
+I've created a file in the example branch for this slide `utilities/promiseTimer.js`. Feel free to import
+it into `index.js` and play with it like I've shown above.
 
-We're going to be using a database called SQLite. Most databases are separate servers that you connect to, but sqlite is just a library that runs with your code and stores things in a file.
+With all that out of the way, let's get back to our project.
