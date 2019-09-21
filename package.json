@@ -1,27 +1,28 @@
 {
-  "name": "sunhacks-19",
+  "name": "@axosoft/sunhacks-19",
   "version": "1.0.0",
-  "description": "",
+  "description": "A head-first introduction to web development",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon -r esm index.js"
+    "start": "cross-env NODE_ENV=development nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chuckdries/sunhacks-19.git"
   },
   "author": "",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/chuckdries/sunhacks-19/issues"
+  },
+  "homepage": "https://github.com/chuckdries/sunhacks-19#readme",
   "dependencies": {
-    "bcrypt": "^3.0.6",
-    "body-parser": "^1.19.0",
-    "esm": "^3.2.25",
     "express": "^4.17.1",
-    "express-handlebars": "^3.1.0",
-    "sqlite": "^3.0.3",
-    "uuid": "^3.3.3"
+    "express-handlebars": "^3.1.0"
   },
   "devDependencies": {
+    "cross-env": "^6.0.0",
     "nodemon": "^1.19.2"
-  },
-  "engines": {
-    "node": ">=12.0"
   }
 }
