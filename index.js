@@ -14,24 +14,20 @@ const app = express();
 app.engine("handlebars", hbs());
 app.set("view engine", "handlebars");
 
-app.use(cookieParser);
+app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use("/public", express.static("public"));
 
 const authorize = async (req, res, next) => {
-  console.log("here1");
   const { accessToken } = req.cookies;
   if (!accessToken) {
     return next();
   }
-  console.log("here2");
   const db = await dbPromise;
-  // const user = db.get("SELECT user.* FROM user LEFT JOIN sessions ");
   const session = await db.get(
     "SELECT * FROM sessions WHERE token=?",
     accessToken
   );
-  console.log(3);
   if (!session) {
     return next();
   }
@@ -45,7 +41,9 @@ const authorize = async (req, res, next) => {
   req.user = user;
   next();
 };
-// app.use(authorize);
+
+app.use(authorize);
+
 app.get("/", async (req, res) => {
   console.log(req.user);
   const db = await dbPromise;
@@ -63,7 +61,7 @@ app.post("/message", async (req, res) => {
   await db.run(
     "INSERT INTO messages (message, authorId) VALUES (?, ?)",
     message,
-    author.id
+    req.user.id
   );
   res.redirect("/");
 });
