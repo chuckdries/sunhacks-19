@@ -2,6 +2,10 @@ const express = require("express");
 const exphbs = require("express-handlebars");
 const bodyParser = require("body-parser");
 const sqlite = require("sqlite");
+const cookieParser = require("cookie-parser");
+const bcrypt = require("bcrypt");
+
+const saltRounds = 10;
 
 const dbPromise = sqlite.open("./database.sqlite");
 const app = express();
@@ -9,6 +13,7 @@ const app = express();
 app.engine("handlebars", exphbs());
 app.set("view engine", "handlebars");
 
+app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use("/public", express.static("./public"));
 
@@ -21,17 +26,41 @@ app.get("/", async (req, res) => {
 
 app.post("/message", async (req, res) => {
   const message = req.body.message;
+  const authorEmail = req.body.authorEmail;
   const db = await dbPromise;
-  await db.run("INSERT INTO messages (message) VALUES (?)", message);
+  const author = await db.get("SELECT * FROM users WHERE email=?", authorEmail);
+  if (!author) {
+    return res.redirect("/");
+  }
+  await db.run(
+    "INSERT INTO messages (message, authorId) VALUES (?, ?)",
+    message,
+    author.id
+  );
+  res.redirect("/");
+});
+
+app.get("/register", (req, res) => {
+  res.render("register");
+});
+
+app.post("/register", async (req, res) => {
+  const db = await dbPromise;
+  const { name, email, password } = req.body;
+  const hashedPassword = await bcrypt.hash(password, saltRounds);
+  console.log(hashedPassword);
+  await db.run(
+    "INSERT INTO users (name, email, password) VALUES (?, ?, ?)",
+    name,
+    email,
+    hashedPassword
+  );
   res.redirect("/");
 });
 
 const setup = async () => {
   const db = await dbPromise;
-  await db.run(`CREATE TABLE IF NOT EXISTS messages (
-    id INTEGER PRIMARY KEY,
-    message STRING
-  );`);
+  await db.migrate({ force: "last" });
   app.listen(3000, () => {
     console.log("listening on http://localhost:3000");
   });

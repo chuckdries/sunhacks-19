@@ -18,7 +18,9 @@
   },
   "homepage": "https://github.com/chuckdries/sunhacks-19#readme",
   "dependencies": {
+    "bcrypt": "^3.0.6",
     "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.4",
     "express": "^4.17.1",
     "express-handlebars": "^3.1.0",
     "sqlite": "^3.0.3"

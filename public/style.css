@@ -4,10 +4,8 @@ body {
 }
 
 a {
-  background: none;
   background-size: contain;
   /* transition: 0.2s all; */
 }
 a:hover {
-  background: url("/public/DSC00831.jpg");
 }
