@@ -18,58 +18,98 @@ app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use("/public", express.static("./public"));
 
+const checkAuth = async (req, res, next) => {
+  const { accessToken } = req.cookies;
+  if (!accessToken) {
+    return next();
+  }
+  const db = await dbPromise;
+  const session = await db.get(
+    "SELECT * FROM sessions WHERE token=?",
+    accessToken
+  );
+  if (!session) {
+    return next();
+  }
+  const user = await db.get(
+    "SELECT name, email, id FROM users WHERE id=?",
+    session.userId
+  );
+  if (!user) {
+    return next();
+  }
+  req.user = user;
+  next();
+};
+
+app.use(checkAuth);
 // index route
 app.get("/", async (req, res) => {
   const db = await dbPromise;
   const messages = await db.all("SELECT * FROM messages");
-  res.render("home", { messages }); // { messages: messages }
+  res.render("home", { messages, user: req.user });
 });
 
 app.post("/message", async (req, res) => {
-  // const message = req.body.message;
-  // const authorEmail = req.body.authorEmail;
-  // const authorPassword = req.body.authorPassword;
-  const { message, authorEmail, authorPassword } = req.body;
+  if (!req.user) {
+    return res.redirect("/");
+  }
+  const { message } = req.body;
   const db = await dbPromise;
-  const author = await db.get("SELECT * FROM users WHERE email=?", authorEmail);
-  if (!author) {
-    return res.redirect("/");
-  }
-  const isPasswordValid = await bcrypt.compare(authorPassword, author.password);
-  if (!isPasswordValid) {
-    return res.redirect("/");
-  }
   await db.run(
     "INSERT INTO messages (message, authorId) VALUES (?, ?)",
     message,
-    author.id
+    req.user.id
   );
   res.redirect("/");
 });
 
 app.get("/register", (req, res) => {
+  if (req.user) {
+    return res.redirect("/");
+  }
   res.render("register");
 });
 
 app.post("/register", async (req, res) => {
+  if (req.user) {
+    return res.redirect("/");
+  }
   const db = await dbPromise;
   const { name, email, password } = req.body;
   const hashedPassword = await bcrypt.hash(password, saltRounds);
   console.log(hashedPassword);
-  await db.run(
+  const result = await db.run(
     "INSERT INTO users (name, email, password) VALUES (?, ?, ?)",
     name,
     email,
     hashedPassword
   );
+  const id = result.stmt.lastID;
+  console.log(id);
+  const accessToken = uuid();
+  await db.run(
+    "INSERT INTO sessions (token, userId) VALUES (?, ?)",
+    accessToken,
+    id
+  );
+  const sessions = await db.all("SELECT * FROM sessions");
+  console.log(sessions);
+  res.cookie("accessToken", accessToken);
   res.redirect("/");
 });
 
 app.get("/login", (req, res) => {
+  if (req.user) {
+    return res.redirect("/");
+  }
   res.render("login");
 });
 
 app.post("/login", async (req, res) => {
+  if (req.user) {
+    return res.redirect("/");
+  }
   const db = await dbPromise;
   const { email, password } = req.body;
   const user = await db.get("SELECT * FROM users WHERE email=?", email);

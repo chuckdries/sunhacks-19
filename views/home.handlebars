@@ -1,12 +1,13 @@
+<h1>Messages</h1>
 {{#each messages}}
 <p>{{this.message}}</p>
 {{/each}}
 
+{{#if user}}
 <form action="message" method="post">
-  <input type="email" name="authorEmail" placeholder="email" />
-  <input type="password" name="authorPassword" placeholder="password" />
   <input type="text" name="message" placeholder="message" />
   <button type="submit">send</button>
 </form>
-<a href="/register">register</a>
-<a href="/login">login</a>
+{{else}}
+You must <a href="/register">register</a> or <a href="/login">login</a> to send a message.
+{{/if}}
