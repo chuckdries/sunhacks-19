@@ -47,6 +47,8 @@ npm install --save express
 
 You'll see a `node_modules` folder now exists. The `--save` flag instructed npm to save express to a section called `dependencies` in our `package.json` file. In the future, if other people download your code, they can run `npm install` to let npm read your package.json and install this project's dependencies automatically. Don't ever forget to use `--save` when adding a new package.
 
+> NOTE: on newer versions of NPM, `--save` is set by default and can be omitted
+
 ## The hello world webserver
 
 First, clear out the `index.js` file.

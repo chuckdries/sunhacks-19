@@ -198,7 +198,7 @@ When the browser sees that line, it will try to download `http://localhost:3000/
 
 Now, run the code. It should look a little better now.
 
-### Injecting data into a template
+## Injecting data into a template
 
 Let's take another look at our greeting route. It takes in a name, and says hello. Let's make a template
 to say hello _with style_.
@@ -228,6 +228,10 @@ app.get("/greet", (req, res) => {
   res.render("greet", { name });
 });
 ```
+
+As we briefly touched on earler, that second parameter we pass to `res.render` is an object. In this case,
+it has a field called `name`, which has the value of the `name` variable. The fields ("keys" in javascript speak)
+determine which variables exist in the template.
 
 Notice how we removed the "null checking" (making sure a value exists) from the route
 to the template. We didn't have to do this, but I wanted to show you how if statements work in handlebars.

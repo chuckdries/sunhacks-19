@@ -15,3 +15,6 @@ cd message-board-workshop
 npm init
 git init
 ```
+
+You're going to work inside the folder you just created, but you can come back to this repo to look at the notes
+and use git to checkout examples.
