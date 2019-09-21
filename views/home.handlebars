@@ -6,7 +6,11 @@
   {{/each}}
 </ul>
 
+{{#if error}}
+<p style="color: red">{{error}}</p>
+{{/if}}
 <form method="POST" action="message">
+  <input type="email" name="authorEmail" placeholder="Enter your email">
   <input type="text" name="message" placeholder="Enter a message">
   <button type="submit">send</button>
 </form>

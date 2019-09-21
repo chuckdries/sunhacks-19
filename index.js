@@ -21,8 +21,18 @@ app.get("/", async (req, res) => {
 
 app.post("/message", async (req, res) => {
   const db = await dbPromise;
-  const { message } = req.body;
-  await db.run("INSERT INTO messages (message) VALUES (?)", message);
+  const { message, authorEmail } = req.body;
+  const author = await db.get("SELECT * FROM users WHERE email=?", authorEmail);
+  if (!author) {
+    console.log("notfound");
+    const messages = await db.all("SELECT * FROM messages");
+    return res.render("home", { messages, error: "user does not exist" });
+  }
+  await db.run(
+    "INSERT INTO messages (message, authorId) VALUES (?, ?)",
+    message,
+    author.id
+  );
   res.redirect("/");
 });
 
