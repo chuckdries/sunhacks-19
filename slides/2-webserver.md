@@ -80,6 +80,8 @@ app.get("/", (req, res) => {
 
 This registers a function that express will call when it gets a `GET` request to the root url, `/`.
 
+> Functions that we pass into other functions to be called later are often called "callback functions".
+
 Finally, we need to tell our app to listen for requests
 
 ```javascript
