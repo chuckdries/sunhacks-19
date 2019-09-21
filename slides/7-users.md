@@ -125,3 +125,61 @@ We're not doing any error handling right now, so if you tried to register with a
 already registered, it would just crash. We'll get to that later.
 
 ## Looking up and storing the author of a message
+
+When we are eventually finished with our implementation, we will have the logged in user's
+information available as a field on every request, but since we don't have login yet, we're
+going to prompt the user for their email every time they send a message.
+
+We're also going to introduce a way to display errors to the user
+
+First, add an email field to the form that takes messages in `views/home.handlebars`, and
+add a way for the template to display error messages
+
+```HTML
+<h1>messages</h1>
+
+<ul>
+  {{#each messages}}
+  <li>{{this.message}} ({{this.id}})</li>
+  {{/each}}
+</ul>
+
+{{#if error}}
+<p style="color: red">{{error}}</p>
+{{/if}}
+<form method="POST" action="message">
+  <input type="email" name="authorEmail" placeholder="Enter your email">
+  <input type="text" name="message" placeholder="Enter a message">
+  <button type="submit">send</button>
+</form>
+
+<a href="register">register</a>
+```
+
+Next, modify the route in `index.js` that accepts messages to also accept and look up the user's email
+
+```javascript
+app.post("/message", async (req, res) => {
+  const db = await dbPromise;
+  const { message, authorEmail } = req.body;
+  const author = await db.get("SELECT * FROM users WHERE email=?", authorEmail);
+  if (!author) {
+    console.log("notfound");
+    const messages = await db.all("SELECT * FROM messages");
+    return res.render("home", { messages, error: "user does not exist" });
+  }
+  await db.run(
+    "INSERT INTO messages (message, authorId) VALUES (?, ?)",
+    message,
+    author.id
+  );
+  res.redirect("/");
+});
+```
+
+If the user lookup fails, instead of redirecting we simply render the home template
+with an error message. This isn't necessarily ideal, because the user sees '/message' in
+their address bar and if they refresh the page it will resubmit the form, but it's fine for now
+
+It's also worth noting that we could have done the user lookup in the same query
+as the message insertion, but this is only temporary anyway.
