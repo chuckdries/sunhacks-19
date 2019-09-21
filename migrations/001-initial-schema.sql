@@ -2,7 +2,8 @@
 CREATE TABLE users (
   id INTEGER PRIMARY KEY,
   name STRING,
-  email STRING UNIQUE
+  email STRING UNIQUE,
+  password STRING
 );
 
 CREATE TABLE messages (

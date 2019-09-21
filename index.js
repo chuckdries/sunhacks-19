@@ -3,7 +3,9 @@ import express from "express";
 import hbs from "express-handlebars";
 import bodyParser from "body-parser";
 import sqlite from "sqlite";
+import bcrypt from "bcrypt";
 
+const saltRounds = 10;
 const dbPromise = sqlite.open("./database.sqlite");
 const app = express();
 
@@ -25,12 +27,17 @@ app.get("/", async (req, res) => {
 
 app.post("/message", async (req, res) => {
   const db = await dbPromise;
-  const { message, authorEmail } = req.body;
+  const { message, authorEmail, authorPassword } = req.body;
   const author = await db.get("SELECT * FROM users WHERE email=?", authorEmail);
   if (!author) {
     console.log("notfound");
     const messages = await db.all("SELECT * FROM messages");
     return res.render("home", { messages, error: "user does not exist" });
+  }
+  const passwordMatches = await bcrypt.compare(authorPassword, author.password);
+  if (!passwordMatches) {
+    const messages = await db.all("SELECT * FROM messages");
+    return res.render("home", { messages, error: "password is wrong" });
   }
   await db.run(
     "INSERT INTO messages (message, authorId) VALUES (?, ?)",
@@ -42,8 +49,15 @@ app.post("/message", async (req, res) => {
 
 app.post("/register", async (req, res) => {
   const db = await dbPromise;
-  const { email, name } = req.body;
-  await db.run("INSERT INTO users (email, name) VALUES (?,?)", email, name);
+  const { email, name, password } = req.body;
+  const hashedPassword = await bcrypt.hash(password, saltRounds);
+  console.log(hashedPassword);
+  await db.run(
+    "INSERT INTO users (email, name, password) VALUES (?, ?, ?)",
+    email,
+    name,
+    hashedPassword
+  );
   res.redirect("/");
 });
 
