@@ -5,6 +5,7 @@ import bodyParser from "body-parser";
 import sqlite from "sqlite";
 import bcrypt from "bcrypt";
 import uuid from "uuid/v4";
+import cookieParser from "cookie-parser";
 
 const saltRounds = 10;
 const dbPromise = sqlite.open("./database.sqlite");
@@ -13,17 +14,47 @@ const app = express();
 app.engine("handlebars", hbs());
 app.set("view engine", "handlebars");
 
+app.use(cookieParser);
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use("/public", express.static("public"));
 
+const authorize = async (req, res, next) => {
+  console.log("here1");
+  const { accessToken } = req.cookies;
+  if (!accessToken) {
+    return next();
+  }
+  console.log("here2");
+  const db = await dbPromise;
+  // const user = db.get("SELECT user.* FROM user LEFT JOIN sessions ");
+  const session = await db.get(
+    "SELECT * FROM sessions WHERE token=?",
+    accessToken
+  );
+  console.log(3);
+  if (!session) {
+    return next();
+  }
+  const user = await db.get(
+    "SELECT id, name, email FROM users WHERE id=?",
+    session.userId
+  );
+  if (!user) {
+    return next();
+  }
+  req.user = user;
+  next();
+};
+// app.use(authorize);
 app.get("/", async (req, res) => {
+  console.log(req.user);
   const db = await dbPromise;
   const messages = await db.all(
     `SELECT messages.id, messages.message, users.name as author FROM messages
      LEFT JOIN users
      WHERE users.id = messages.authorId`
   );
-  res.render("home", { messages });
+  res.render("home", { messages, user: req.user });
 });
 
 app.post("/message", async (req, res) => {
