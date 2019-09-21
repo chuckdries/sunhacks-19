@@ -198,4 +198,40 @@ When the browser sees that line, it will try to download `http://localhost:3000/
 
 Now, run the code. It should look a little better now.
 
-In our next slide, we'll actually inject data into our template.
+### Injecting data into a template
+
+Let's take another look at our greeting route. It takes in a name, and says hello. Let's make a template
+to say hello _with style_.
+
+Make a file in `views` called `greet.handlebars`, and fill it out like so:
+
+```HTML
+{{#if name}}
+<h1>Hello there, {{ name }} </h1>
+{{else}}
+<h1>Well this is awkward... I don't know who you are</h1>
+{{/if}}
+<h1>
+```
+
+Now, in `index.js`, wire up the template to our greet routes
+
+```javascript
+app.get("/greet/:name", (req, res) => {
+  const name = req.params.name;
+  res.render("greet", { name: name });
+});
+
+app.get("/greet", (req, res) => {
+  const name = req.query.name;
+  if (name) {
+    // { name } is shorthand for { name: name }
+    res.render("greet", { name });
+  }
+});
+```
+
+Notice how we removed the "null checking" (making sure a value exists) from the route
+to the template. We didn't have to do this, but I wanted to show you how if statements work in handlebars.
+
+In our next slide, we're going to look at HTML forms and start building our message board

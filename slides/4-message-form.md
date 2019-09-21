@@ -1,4 +1,6 @@
-## 4. A form that takes the user's name and greets them
+## 4. A form that takes input from users
+
+> TODO: we're introducing the message board here
 
 We'll combine our knowledge of templates with HTML forms to create a page with a text box
 where the user can enter their name and be shown a greeting.
@@ -58,3 +60,5 @@ When the user submits this form, it will send a request to
 We don't have anywhere to put that form quite yet
 
 ### Adding the form to a template
+
+We're going to put the greet form in our greeting page, so it can ask users for their name
