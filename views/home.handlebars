@@ -9,11 +9,14 @@
 {{#if error}}
 <p style="color: red">{{error}}</p>
 {{/if}}
+
+{{#if user}}
 <form method="POST" action="message">
-  <input type="email" name="authorEmail" placeholder="Enter your email">
-  <input type="password" name="authorPassword" placeholder="Enter your password">
   <input type="text" name="message" placeholder="Enter a message">
   <button type="submit">send</button>
 </form>
-
-<a href="register">register</a>
+{{else}}
+<p>You can't send a message until you log in</p>
+<a href="/register">register</a>
+<a href="/login">log in</a>
+{{/if}}

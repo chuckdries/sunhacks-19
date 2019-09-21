@@ -13,6 +13,13 @@ CREATE TABLE messages (
   FOREIGN KEY(authorId) REFERENCES users(id)
 );
 
+CREATE TABLE sessions (
+  token STRING PRIMARY KEY,
+  userId INTEGER,
+  FOREIGN KEY(userId) REFERENCES users(id)
+);
+
 -- Down
 DROP TABLE users;
 DROP TABLE messages;
+DROP TABLE sessions;

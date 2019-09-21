@@ -4,6 +4,7 @@ import hbs from "express-handlebars";
 import bodyParser from "body-parser";
 import sqlite from "sqlite";
 import bcrypt from "bcrypt";
+import uuid from "uuid/v4";
 
 const saltRounds = 10;
 const dbPromise = sqlite.open("./database.sqlite");
@@ -27,18 +28,7 @@ app.get("/", async (req, res) => {
 
 app.post("/message", async (req, res) => {
   const db = await dbPromise;
-  const { message, authorEmail, authorPassword } = req.body;
-  const author = await db.get("SELECT * FROM users WHERE email=?", authorEmail);
-  if (!author) {
-    console.log("notfound");
-    const messages = await db.all("SELECT * FROM messages");
-    return res.render("home", { messages, error: "user does not exist" });
-  }
-  const passwordMatches = await bcrypt.compare(authorPassword, author.password);
-  if (!passwordMatches) {
-    const messages = await db.all("SELECT * FROM messages");
-    return res.render("home", { messages, error: "password is wrong" });
-  }
+  const { message } = req.body;
   await db.run(
     "INSERT INTO messages (message, authorId) VALUES (?, ?)",
     message,
@@ -52,17 +42,49 @@ app.post("/register", async (req, res) => {
   const { email, name, password } = req.body;
   const hashedPassword = await bcrypt.hash(password, saltRounds);
   console.log(hashedPassword);
-  await db.run(
+  const result = await db.run(
     "INSERT INTO users (email, name, password) VALUES (?, ?, ?)",
     email,
     name,
     hashedPassword
   );
+  const accessToken = uuid();
+  await db.run(
+    "INSERT INTO sessions (userId, token) VALUES (?, ?)",
+    result.stmt.lastID,
+    accessToken
+  );
+  res.cookie("accessToken", accessToken);
   res.redirect("/");
 });
 
 app.get("/register", (req, res) => {
   res.render("register");
+});
+
+app.get("/login", (req, res) => {
+  res.render("login");
+});
+
+app.post("/login", async (req, res) => {
+  const db = await dbPromise;
+  const { email, password } = req.body;
+  const user = await db.get("SELECT * FROM users WHERE email=?", email);
+  if (!user) {
+    return res.render("login", { error: "user does not exist" });
+  }
+  const passwordMatches = await bcrypt.compare(password, user.password);
+  if (!passwordMatches) {
+    return res.render("login", { error: "password is wrong" });
+  }
+  const accessToken = uuid();
+  await db.run(
+    "INSERT INTO sessions (userId, token) VALUES (?, ?)",
+    user.id,
+    accessToken
+  );
+  res.cookie("accessToken", accessToken);
+  res.redirect("/");
 });
 
 const setup = async () => {
