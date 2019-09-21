@@ -13,13 +13,6 @@ app.set("view engine", "handlebars");
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use("/public", express.static("public"));
 
-dbPromise.then(db => {
-  db.run(`CREATE TABLE IF NOT EXISTS messages (
-    id INTEGER PRIMARY KEY,
-    message STRING
-  )`);
-});
-
 app.get("/", async (req, res) => {
   const db = await dbPromise;
   const messages = await db.all("SELECT * FROM messages");
@@ -33,6 +26,23 @@ app.post("/message", async (req, res) => {
   res.redirect("/");
 });
 
-app.listen(3000, () => {
-  console.log("listening on http://localhost:3000");
+app.post("/register", async (req, res) => {
+  const db = await dbPromise;
+  const { email, name } = req.body;
+  await db.run("INSERT INTO users (email, name) VALUES (?,?)", email, name);
+  res.redirect("/");
 });
+
+app.get("/register", (req, res) => {
+  res.render("register");
+});
+
+const setup = async () => {
+  const db = await dbPromise;
+  await db.migrate({ force: "last" });
+  app.listen(3000, () => {
+    console.log("listening on http://localhost:3000");
+  });
+};
+
+setup();
