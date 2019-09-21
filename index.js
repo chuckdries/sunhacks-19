@@ -46,7 +46,12 @@ app.use(checkAuth);
 // index route
 app.get("/", async (req, res) => {
   const db = await dbPromise;
-  const messages = await db.all("SELECT * FROM messages");
+  const messages = await db.all(
+    `SELECT messages.message, messages.id, users.name as author 
+      FROM messages 
+      LEFT JOIN users 
+      WHERE users.id=messages.authorId`
+  );
   res.render("home", { messages, user: req.user });
 });
 
