@@ -1,15 +1,14 @@
 ## 4. A form that takes input from users
 
-> TODO: we're introducing the message board here
-
-We'll combine our knowledge of templates with HTML forms to create a page with a text box
-where the user can enter their name and be shown a greeting.
+We're going to use forms with our knowledge of templating to create a page where users
+can leave messages for each other
 
 Activities
 
-1. Write a form that sends the user's name to `/greet`
-2. Write a template that renders either a greeting, or a form to take the user's name
-3. Handle the form data and render it into the aforementioned template
+1. Write a route that accepts messages and stores them, we'll call it `/message/`
+2. Write a form that sends the user's message to `/message`
+3. Write a template that can render our form and messages
+4. Write a route that passes all the messages into that template
 
 ### A quick primer on HTML forms
 
