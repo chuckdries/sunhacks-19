@@ -1,7 +1,3 @@
-prep branches contain code pre-written
-prep/slides-with-code contains slides/notes with relevant code cherry-picked inline, but any given commit only touches code or notes but not both. Finalize code samples as notes are written
-use interactive rebase to separate - slides go into master, code samples go into example/ branches
-
 # Sunhacks 2019 "zero to hero" workshop series
 
 A head-first introduction to web development
@@ -17,11 +13,8 @@ We're going to be building a message board, sort of like twitter but without the
 
 ## How to use this repo
 
-I'm writing the code for this in advance - all my original prep code and draft notes are in branches labeled `prep/...`.
+This is going to be a live coding session, so I won't actually be displaying the slides.
 
 the code we write together will eventually be uploaded to branches listed as `live/...`
 
-The slides will live in the `slides` folder. When relevant, a slide may list a reference to an example branch, 
-which will contain the project with that step completed. Try to finish a slide yourself first, but feel free to check out the example branch. 
-
-Be sure you're writing your code in a separate branch so checking out example branches doesn't blow away your work!
+The slides will live in the `slides` folder - they're detailed enough to follow as a standalone tutorial. Some of them make references to example branches. Those aren't ready yet unfortunately.
