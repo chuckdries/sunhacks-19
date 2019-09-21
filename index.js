@@ -15,7 +15,11 @@ app.use("/public", express.static("public"));
 
 app.get("/", async (req, res) => {
   const db = await dbPromise;
-  const messages = await db.all("SELECT * FROM messages");
+  const messages = await db.all(
+    `SELECT messages.id, messages.message, users.name as author FROM messages
+     LEFT JOIN users
+     WHERE users.id = messages.authorId`
+  );
   res.render("home", { messages });
 });
 
