@@ -1,7 +1,8 @@
-<form action="greet" method="get">
-  <input type="text" name="name" placeholder="what's your name" />
-  <button type="submit">say hello</button>
+{{#each messages}}
+<p>{{this}}</p>
+{{/each}}
+
+<form action="message" method="post">
+  <input type="text" name="message" placeholder="message" />
+  <button type="submit">send</button>
 </form>
-<a href="google.com">asdf</a>
-<!-- -->
-{{!--  --}}
