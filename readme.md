@@ -4,6 +4,8 @@ A head-first introduction to web development
 
 ## Overview
 
+# See the branch "prep/in-memory-messageboard" for the message board
+
 This series will be broken into two workshops:
 
 1. A web application that takes input from users and shows it to other users
