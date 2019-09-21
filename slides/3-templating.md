@@ -224,10 +224,8 @@ app.get("/greet/:name", (req, res) => {
 
 app.get("/greet", (req, res) => {
   const name = req.query.name;
-  if (name) {
-    // { name } is shorthand for { name: name }
-    res.render("greet", { name });
-  }
+  // { name } is shorthand for { name: name }
+  res.render("greet", { name });
 });
 ```
 
