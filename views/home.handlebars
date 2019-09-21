@@ -1,3 +1,12 @@
-<h1>
-    hello world!
-</h1>
+<h1>messages</h1>
+
+<ul>
+  {{#each messages}}
+  <li>{{this}}</li>
+  {{/each}}
+</ul>
+
+<form method="POST" action="message">
+  <input type="text" name="message" placeholder="Enter a message">
+  <button type="submit">send</button>
+</form>
