@@ -183,3 +183,37 @@ their address bar and if they refresh the page it will resubmit the form, but it
 
 It's also worth noting that we could have done the user lookup in the same query
 as the message insertion, but this is only temporary anyway.
+
+## Looking up the message author on retrieval
+
+Let's show a name next to each message instead of a number.
+
+First, modify the template: `views/home.handlebars`
+
+```HTML
+<li>{{this.message}} ({{this.author}})</li>
+```
+
+Next, we need to write a query with what's called a "join", which will tell SQL to synthesise
+our result by combining data from multiple templates.
+
+Here's our index route in `index.js`
+
+```javascript
+app.get("/", async (req, res) => {
+  const db = await dbPromise;
+  const messages = await db.all(
+    `SELECT messages.id, messages.message, users.name as author FROM messages
+     LEFT JOIN users
+     WHERE users.id = messages.authorId`
+  );
+  res.render("home", { messages });
+});
+```
+
+That's a real chonker of a query, but it ready pretty clearly. It selects the `message` and `id`
+from each message, and looks up the `authorId` field in the `users` table, then attaches the
+author's `name`, which it calls `author` in our resulting object.
+
+Run the code now. Register, then send a message, and you should see your name next to the message
+even though you entered your email in the message form.
