@@ -15,16 +15,12 @@ app.get("/", (req, res) => {
 
 app.get("/greet/:name", (req, res) => {
   const name = req.params.name;
-  res.send(`Hello ${name}! Welcome to your page`);
+  res.render("greet", { name: name });
 });
 
 app.get("/greet", (req, res) => {
   const name = req.query.name;
-  if (name) {
-    res.send(`Hello ${name}!`);
-  } else {
-    res.send("Well this is awkward... I don't know who you are");
-  }
+  res.render("greet", { name });
 });
 
 app.listen(3000, () => {
