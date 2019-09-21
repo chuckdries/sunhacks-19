@@ -1,0 +1,10 @@
+<h1>login</h1>
+{{#if error}}
+<p class="error-message">{{error}}</p>
+{{/if}}
+<form action="login" method="POST">
+  <input type="email" name="email" placeholder="email" />
+  <input type="password" name="password" placeholder="password" />
+  <button type="submit">login</button>
+</form>
+<a href="/">home</a>

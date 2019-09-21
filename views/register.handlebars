@@ -1,4 +1,7 @@
 <h1>register for an account</h1>
+{{#if error}}
+<p class="error-message">{{error}}</p>
+{{/if}}
 <form action="register" method="POST">
   <input type="email" name="email" placeholder="what's your email" />
   <input type="text" name="name" placeholder="what's your name" />
