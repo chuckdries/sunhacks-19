@@ -1,7 +1,21 @@
 // index.js
-const express = require("express");
-const hbs = require("express-handlebars");
-const bodyParser = require("body-parser");
+import express from "express";
+import hbs from "express-handlebars";
+import bodyParser from "body-parser";
+
+import { getPromiseTimer } from "./utilities/promiseTimer";
+
+getPromiseTimer(300, "howdy").then(value => {
+  console.log("used .then: " + value);
+});
+
+const asyncTest = async () => {
+  const yoTimer = getPromiseTimer(1000, "yo");
+  const greeting = await yoTimer;
+  console.log("used await: " + greeting);
+};
+
+asyncTest();
 
 const app = express();
 
