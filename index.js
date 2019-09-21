@@ -25,11 +25,17 @@ app.get("/", async (req, res) => {
 });
 
 app.post("/message", async (req, res) => {
-  const message = req.body.message;
-  const authorEmail = req.body.authorEmail;
+  // const message = req.body.message;
+  // const authorEmail = req.body.authorEmail;
+  // const authorPassword = req.body.authorPassword;
+  const { message, authorEmail, authorPassword } = req.body;
   const db = await dbPromise;
   const author = await db.get("SELECT * FROM users WHERE email=?", authorEmail);
   if (!author) {
+    return res.redirect("/");
+  }
+  const isPasswordValid = await bcrypt.compare(authorPassword, author.password);
+  if (!isPasswordValid) {
     return res.redirect("/");
   }
   await db.run(
