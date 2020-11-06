@@ -4,7 +4,7 @@ A head-first introduction to web development
 
 ## Overview
 
-# See the branch "prep/in-memory-messageboard" for the message board
+# See the branch "prep/in-memory-messageboard" for the simplest example message board. Otherwise, the master branch is the completed project including register/login systems
 
 This series will be broken into two workshops:
 
