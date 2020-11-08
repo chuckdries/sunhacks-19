@@ -2,13 +2,17 @@
 import express from "express";
 import hbs from "express-handlebars";
 import bodyParser from "body-parser";
-import sqlite from "sqlite";
+import sqlite3 from "sqlite3";
+import { open } from "sqlite";
 import bcrypt from "bcrypt";
 import uuid from "uuid/v4";
 import cookieParser from "cookie-parser";
 
 const saltRounds = 10;
-const dbPromise = sqlite.open("./database.sqlite");
+const dbPromise = open({
+  filename: "./database.sqlite",
+  driver: sqlite3.Database,
+});
 const app = express();
 
 app.engine("handlebars", hbs());

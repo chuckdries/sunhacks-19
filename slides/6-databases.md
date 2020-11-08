@@ -32,14 +32,18 @@ npm i -s sqlite
 In `index.js`, import it
 
 ```javascript
-import sqlite from "sqlite";
+import sqlite3 from "sqlite3";
+import { open } from "sqlite";
 ```
 
 Somewhere near the top of `index.js`, open a database file
 (it will be created if it doesn't exist)
 
 ```javascript
-const dbPromise = sqlite.open("./database.sqlite");
+const dbPromise = open({
+  filename: "./database.sqlite",
+  driver: sqlite3.Database,
+});
 ```
 
 `dbPromise` is a promise that represents access to our database. It's a promise because it
@@ -69,7 +73,7 @@ instance, so we can just do something like this
 
 ```javascript
 const dbPromise = sqlite.open("./database.sqlite"); // was already here
-dbPromise.then(db => {
+dbPromise.then((db) => {
   db.run(`CREATE TABLE IF NOT EXISTS messages(
     id INTEGER PRIMARY KEY,
     message STRING
