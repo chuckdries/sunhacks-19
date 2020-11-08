@@ -26,7 +26,7 @@ code and stores the entire database in a single file.
 Let's install [`sqlite`](https://www.npmjs.com/package/sqlite)
 
 ```
-npm i -s sqlite
+npm i -s sqlite sqlite3
 ```
 
 In `index.js`, import it
