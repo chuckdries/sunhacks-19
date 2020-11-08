@@ -203,7 +203,11 @@ Here's our index route in `index.js`
 app.get("/", async (req, res) => {
   const db = await dbPromise;
   const messages = await db.all(
-    `SELECT messages.id, messages.message, users.name as author FROM messages
+    `SELECT
+      messages.id,
+      messages.message,
+      users.name as author
+     FROM messages
      LEFT JOIN users
      WHERE users.id = messages.authorId`
   );
@@ -211,9 +215,11 @@ app.get("/", async (req, res) => {
 });
 ```
 
-That's a real chonker of a query, but it ready pretty clearly. It selects the `message` and `id`
+That's a larger query than we've worked with before, but it reads pretty clearly. It selects the `message` and `id`
 from each message, and looks up the `authorId` field in the `users` table, then attaches the
 author's `name`, which it calls `author` in our resulting object.
+
+Note that the indentation in the query is completely optional, I've chosen to do so for legibility.
 
 Run the code now. Register, then send a message, and you should see your name next to the message
 even though you entered your email in the message form.
