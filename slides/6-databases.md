@@ -72,7 +72,10 @@ We're going to do that as soon as the database is ready. The promise resolves to
 instance, so we can just do something like this
 
 ```javascript
-const dbPromise = sqlite.open("./database.sqlite"); // was already here
+const dbPromise = open({
+  filename: "./database.sqlite",
+  driver: sqlite3.Database,
+}); // was already here
 dbPromise.then((db) => {
   db.run(`CREATE TABLE IF NOT EXISTS messages(
     id INTEGER PRIMARY KEY,
